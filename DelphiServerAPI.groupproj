@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{BB7F8A39-31FA-47C4-9C0A-0CBD1C05A0EC}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ServerAPI.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ServerAPI">
+        <MSBuild Projects="ServerAPI.dproj"/>
+    </Target>
+    <Target Name="ServerAPI:Clean">
+        <MSBuild Projects="ServerAPI.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ServerAPI:Make">
+        <MSBuild Projects="ServerAPI.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ServerAPI"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ServerAPI:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ServerAPI:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
