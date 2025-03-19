@@ -13,7 +13,7 @@ type
     FCaption: string;
     FIsPublic: Boolean;
   public
-    constructor Create; // Konstruktor för att skapa ett nytt objekt
+    constructor Create(AAlbumID: Integer; const ACaption: string);
     destructor Destroy; override; // För att frigöra resurser vid rensning
 
     property AlbumID: Integer read FAlbumID write FAlbumID;

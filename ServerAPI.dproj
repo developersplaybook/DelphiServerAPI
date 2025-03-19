@@ -128,6 +128,11 @@
         <DCCReference Include="Services\PhotosService.pas"/>
         <DCCReference Include="Services\RandomHandlerService.pas"/>
         <DCCReference Include="ServerAPI.Services.pas"/>
+        <DCCReference Include="Helpers\LinqHelper.pas"/>
+        <DCCReference Include="ServerAPI.Helpers.pas"/>
+        <DCCReference Include="Repositories\AlbumsRepository.pas"/>
+        <DCCReference Include="Repositories\BaseRepository.pas"/>
+        <DCCReference Include="Repositories\PhotosRepository.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

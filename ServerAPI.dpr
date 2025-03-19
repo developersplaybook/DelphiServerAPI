@@ -40,7 +40,12 @@ uses
   PhotoDetailsService in 'Services\PhotoDetailsService.pas',
   PhotosService in 'Services\PhotosService.pas',
   RandomHandlerService in 'Services\RandomHandlerService.pas',
-  ServerAPI.Services in 'ServerAPI.Services.pas';
+  ServerAPI.Services in 'ServerAPI.Services.pas',
+  LinqHelper in 'Helpers\LinqHelper.pas',
+  ServerAPI.Helpers in 'ServerAPI.Helpers.pas',
+  AlbumsRepository in 'Repositories\AlbumsRepository.pas',
+  BaseRepository in 'Repositories\BaseRepository.pas',
+  PhotosRepository in 'Repositories\PhotosRepository.pas';
 
 // Detta är den centrala enheten för MVC Framework
 

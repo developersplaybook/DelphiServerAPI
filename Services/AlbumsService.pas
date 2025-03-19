@@ -19,10 +19,10 @@ type
                        const AAlbumValidator: IAlbumValidator;
                        const AAlbumHelperService: IAlbumHelperService);
 
-    function DeleteAlbumAsync(AlbumId: Integer): ITask<Integer>;
-    function AddAlbumAsync(const Caption: string): ITask<TAlbumValidationResult>;
-    function UpdateAlbumAsync(const Caption: string; AlbumId: Integer): ITask<TAlbumValidationResult>;
-    function GetAlbumsWithPhotoCountAsync: ITask<TList<TAlbumViewModel>>;
+    function DeleteAlbumAsync(AlbumId: Integer): IFuture<Integer>;
+    function AddAlbumAsync(const Caption: string): IFuture<TAlbumValidationResult>;
+    function UpdateAlbumAsync(const Caption: string; AlbumId: Integer): IFuture<TAlbumValidationResult>;
+    function GetAlbumsWithPhotoCountAsync: IFuture<TList<TAlbumViewModel>>;
   end;
 
 implementation
@@ -39,28 +39,34 @@ begin
   FAlbumHelperService := AAlbumHelperService;
 end;
 
-function TAlbumsService.DeleteAlbumAsync(AlbumId: Integer): ITask<Integer>;
+function TAlbumsService.DeleteAlbumAsync(AlbumId: Integer): IFuture<Integer>;
 begin
   Result := TTask.Run<Integer>(
-    procedure: Integer
+    function: Integer
     var
       Album: TAlbum;
     begin
       FAlbumsRepository.BeginTransactionAsync.Result;
       try
+        // Get the album by its ID asynchronously
         Album := FAlbumsRepository.GetAlbumByIdAsync(AlbumId).Result;
         if not Assigned(Album) then
           raise Exception.Create('Album not found.');
 
+        // Perform delete operation
         FAlbumsRepository.DeleteAlbum(Album);
+        // Save changes and return the result
         Result := FAlbumsRepository.SaveChangesAsync.Result;
 
+        // Commit the transaction
         FAlbumsRepository.CommitTransactionAsync.Result;
       except
+        // If there is an exception, roll back the transaction
         FAlbumsRepository.RollbackTransactionAsync.Result;
         raise;
       end;
-    end);
+    end
+  );
 end;
 
 function TAlbumsService.AddAlbumAsync(const Caption: string): ITask<TAlbumValidationResult>;

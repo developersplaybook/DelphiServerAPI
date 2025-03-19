@@ -17,7 +17,6 @@ type
     procedure AddAlbumAsync(Album: TAlbum);
     procedure UpdateAlbum(Album: TAlbum);
     procedure DeleteAlbum(Album: TAlbum);
-    function SaveChangesAsync: IFuture<Integer>;
 
     // Transaction methods
     function BeginTransactionAsync: IFuture<Boolean>;

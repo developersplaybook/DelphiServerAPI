@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, MVCFramework, ServerAPI.Interfaces, ServerAPI.ViewModels,
-  System.Generics.Collections, System.Threading;
+  ServerAPI.Helpers, System.Generics.Collections, System.Threading, LoggerPro, LoggerPro.ConsoleAppender;
 
 type
   [Route('/api/[controller]')]
@@ -53,7 +53,7 @@ begin
   FAlbumsService := AAlbumsService;
 end;
 
-procedure TAlbumsController.GetAlbumById(const id: Integer);
+function TAlbumsController.GetAlbumById(const id: Integer):IFuture<TList<TAlbumViewModel>>;
 var
   Albums: TList<TAlbumViewModel>;
   Album: TAlbumViewModel;
@@ -63,11 +63,12 @@ begin
     Albums := TTask.Future<TList<TAlbumViewModel>>(
       function: TList<TAlbumViewModel>
       begin
-        Result := FAlbumsService.GetAlbumsWithPhotoCountAsync.Value;  // Return the result directly
+        Result := FAlbumsService.GetAlbumsWithPhotoCountAsync;
       end).Value;  // Block and wait for the result
 
     // Find the album matching the ID
-    Album := Albums.FirstOrDefault(
+    Album := TLinqHelper.FirstOrDefault<TAlbumViewModel>(
+      Albums,
       function(const a: TAlbumViewModel): Boolean
       begin
         Result := a.AlbumID = id;
@@ -77,11 +78,11 @@ begin
     if Assigned(Album) then
       Render(Album)
     else
-      RaiseNotFound('Album with ID ' + id.ToString + ' not found');
+      raise Exception.Create('Album with ID ' + id.ToString + ' not found');
   except
     on E: Exception do
     begin
-      LogError(E, 'Error occurred while retrieving album with ID ' + id.ToString);
+      //LogError(E, 'Error occurred while retrieving album with ID ' + id.ToString);
       Render(500, 'An error occurred while processing your request.');
     end;
   end;
@@ -103,7 +104,7 @@ begin
   except
     on E: Exception do
     begin
-      LogError(E, 'Error occurred while retrieving albums');
+      //LogError(E, 'Error occurred while retrieving albums');
       Render(500, 'An error occurred while processing your request.');
     end;
   end;
